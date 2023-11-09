@@ -1,4 +1,5 @@
-# interrupcoes_enelsp
+# Metodologia da reportagem "Em São Paulo, falta de luz na periferia é até 8 vezes mais frequente que em áreas centrais"
+
 ## Dados
 * Os dados de “[Interrupções de Energia Elétrica nas Redes de Distribuição](https://dadosabertos.aneel.gov.br/dataset/interrupcoes-de-energia-eletrica-nas-redes-de-distribuicao)” foram baixados do Portal de Dados Abertos da Agência Nacional de Energia Elétrica (ANEEL) no dia 8 de novembro de 2023. O arquivo pode ser consultado aqui;
 * A localização dos conjuntos de unidades consumidoras foram exportados no [Portal de Dados Geográficos](https://dadosabertos-aneel.opendata.arcgis.com/) da ANEEL. Selecionamos apenas os dados do ano de [2022](https://dadosabertos-aneel.opendata.arcgis.com/datasets/6422007586134edf8b3504a456072ff0/about);
