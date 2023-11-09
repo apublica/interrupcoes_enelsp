@@ -1,0 +1,104 @@
+---
+title: "Análise - Interrupções ENEL SP"
+format: html
+editor: visual
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(lubridate)
+
+#df <- read.csv2("/Users/biancamuniz/Documents/repos/interrupcoes_enelsp/dados/dados_aneel_2023.csv")
+
+#eletropaulo <-df |>
+#  filter(grepl("ELETROPAULO", sig_agente, ignore.case = TRUE)) 
+#write.csv2(eletropaulo, "dados_enelsp_2023.csv")
+
+eletropaulo <- read.csv2("/Users/biancamuniz/Documents/repos/interrupcoes_enelsp/dados/dados_enelsp_2023.csv")
+
+# Converter colunas para tipos de dados desejados
+eletropaulo$dat_inicio_interrupcao <- as.POSIXct(eletropaulo$dat_inicio_interrupcao, format = "%Y-%m-%d %H:%M:%S")
+eletropaulo$dat_fim_interrupcao <- as.POSIXct(eletropaulo$dat_fim_interrupcao, format = "%Y-%m-%d %H:%M:%S")
+eletropaulo$num_cpfcnpj <- as.character(eletropaulo$num_cpfcnpj)
+
+eletropaulo <- eletropaulo %>%
+  mutate(cnpj_limpo = ifelse(nchar(num_cpfcnpj) == 14, num_cpfcnpj, 
+                            paste0(strrep("0", 14 - nchar(num_cpfcnpj)), num_cpfcnpj)))
+
+
+# Calcula a diferença em minutos
+eletropaulo$minutos_int <- as.numeric(difftime(eletropaulo$dat_fim_interrupcao, eletropaulo$dat_inicio_interrupcao, units = "mins"))
+```
+
+## Quantas interrupções ocorreram por ano?
+
+```{r}
+eletropaulo |> 
+  summarise(ocor=n())
+```
+
+## Quantas interrupções ocorreram por ano, de acordo com tipo (programada/não programada)?
+
+```{r}
+eletropaulo |> 
+  group_by(dsc_tipo_interrupcao) |> 
+  summarise(ocor=n()) |> 
+  DT::datatable()
+```
+
+## Interrupções não programadas por Identificador referenciando o Motivo do Expurgo.
+
+-   0 - Não houve expurgo
+
+-   1 - Falha nas instalações da unidade consumidora que não provoque interrupção em instalações de terceiros
+
+-   2 - Interrupção decorrente de obras de interesse exclusivo do consumidor e que afete somente a unidade consumidora do mesmo
+
+-   3 - Interrupção em situação de emergência
+
+-   4 - Suspensão por inadimplemento do consumidor ou por deficiência técnica e/ou de segurança das instalações da unidade consumidora que não provoque interrupção em instalações de terceiros, previstas em regulamentação
+
+-   5 - Vinculadas a programas de racionamento instituídos pela União
+
+-   6 - Ocorridas em dia crítico
+
+-   7 - Oriundas de atuação de esquemas de alívio de carga solicitado pelo ONS
+
+-   8 - Interrupção de origem externa ao sistema de distribuição
+
+```{r}
+eletropaulo |> 
+  filter(dsc_tipo_interrupcao=="Não Programada") |> 
+  group_by(ide_motivo_interrupcao) |> 
+  summarise(ocor=n()) |> 
+  DT::datatable()
+```
+
+
+```{r}
+df <- eletropaulo |> 
+  filter(dsc_tipo_interrupcao=="Não Programada") |> 
+  filter(ide_motivo_interrupcao==3) |> 
+  group_by(dsc_conjunto_unidade_consumidora) |> 
+  summarise(ocor=n())
+```
+
+
+
+
+
+
+
+
+
+
+```{r}
+write_csv2(df, "/Users/biancamuniz/Documents/repos/interrupcoes_enelsp/dados/conjuntos_interrupcoes_enel.csv")
+```
+
+
+
