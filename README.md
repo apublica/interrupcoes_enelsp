@@ -1,4 +1,4 @@
-# Metodologia da reportagem "Em São Paulo, falta de luz na periferia é até 8 vezes mais frequente que em áreas centrais"
+# Metodologia da reportagem "Em São Paulo, corte de luz na periferia é até 8 vezes mais frequente que no centro"
 
 ## Dados
 * Os dados de “[Interrupções de Energia Elétrica nas Redes de Distribuição](https://dadosabertos.aneel.gov.br/dataset/interrupcoes-de-energia-eletrica-nas-redes-de-distribuicao)” foram baixados do Portal de Dados Abertos da Agência Nacional de Energia Elétrica (ANEEL) no dia 8 de novembro de 2023. O arquivo pode ser consultado aqui;
